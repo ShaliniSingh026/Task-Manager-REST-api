@@ -7,10 +7,6 @@ const mongoose = require('mongoose');
 //Load middleware
 app.use(bodyParser.json())
 
-// Import Routes
-// const userRoute = require('./Routes/user');
-// app.use('/');
-
 //Get all users
 app.get('/',(req,res)=> {
     user.find().then((result) => {
@@ -53,11 +49,12 @@ app.patch('/:userId',(req,res)=> {
 app.delete('/:userId',(req,res)=> {
     user.findOneAndUpdate({
          _id: req.params.id 
-        }, {
-        $set: req.body
+    },{
+         $set: req.body
         }).then((removeduserDoc) => {
             res.send(removeduserDoc);
         })
+        
 });
 
 
@@ -71,16 +68,16 @@ app.get('/:userId/task',(req,res)=> {
         res.send(err);
     })
 });
-// app.get('/:userId',(req,res)=> {
-//     Task.findOne({
-//         _id: req.params.taskId,
-//         _userId: req.params.userId
-//     }).then((result) => {
-//        res.send(result);
-//     }).catch((err)=>{
-//         res.send(err);
-//     })
-// });
+/* app.get('/:userId',(req,res)=> {
+     Task.findOne({
+         _id: req.params.taskId,
+         _userId: req.params.userId
+     }).then((result) => {
+        res.send(result);
+     }).catch((err)=>{
+         res.send(err);
+    })
+ });*/
 //Create tasks of users 
 app.post('/:userId/task',(req,res)=> {
     let newTask = new Task({
@@ -114,19 +111,6 @@ app.delete('/:userId/task/:taskId',(req,res)=> {
             res.send(removedtaskDoc);
         })
 });
-
-
-
-
-
-//app.use('/user', userRoute);
-
-//For Routes
-//app.get('/user',(req,res)=> {
-  //  User.find({}).then((User) => {
-    //   res.send(User);
-    //})
-//});
 
 //Connect to Db
 mongoose.connect('mongodb://127.0.0.1:27017/Task-manager', {
