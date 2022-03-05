@@ -7,7 +7,7 @@ Username: {
     type: String,
     required: true,
     trim:true,
-    maxlength: [35, 'Name must have not more than 40 characters'],
+    maxlength: [35, 'Name must have not more than 35 characters'],
     minLength: [5, 'Name is too short!'], 
     validate(value) {
         if (!validator.isAlpha(value)) {
