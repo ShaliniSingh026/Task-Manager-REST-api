@@ -16,6 +16,17 @@ app.get('/',(req,res)=> {
     })
     // res.send('hi');
 });
+//Get all tasks of users 
+app.get('/:userId/task',(req,res)=> {
+    Task.find({
+        _userId: req.params.userId, 
+    }).then((result) => {
+       res.send(result);
+    }).catch((err)=>{
+        res.send(err);
+    })
+});
+
 //Create Users
 app.post('/',(req,res)=> {
     let Username = req.body.Username;
@@ -32,52 +43,6 @@ app.post('/',(req,res)=> {
         res.send(userDoc);
     })
 });
-
-//For updating Users
-app.patch('/:userId',(req,res)=> {
-    user.findOneAndUpdate({ 
-        _id: req.params.userId
-    }, {
-    $set: req.body          
-    }).then(() => {
-        // res.send(result);
-        res.sendStatus(200);
-    })
-});
-
-//For deleting Users
-app.delete('/:userId',(req,res)=> {
-    user.findOneAndUpdate({
-         _id: req.params.id 
-    },{
-         $set: req.body
-        }).then((removeduserDoc) => {
-            res.send(removeduserDoc);
-        })
-        
-});
-
-
-//Get all tasks of users 
-app.get('/:userId/task',(req,res)=> {
-    Task.find({
-        _userId: req.params.userId, 
-    }).then((result) => {
-       res.send(result);
-    }).catch((err)=>{
-        res.send(err);
-    })
-});
-/* app.get('/:userId',(req,res)=> {
-     Task.findOne({
-         _id: req.params.taskId,
-         _userId: req.params.userId
-     }).then((result) => {
-        res.send(result);
-     }).catch((err)=>{
-         res.send(err);
-    })
- });*/
 //Create tasks of users 
 app.post('/:userId/task',(req,res)=> {
     let newTask = new Task({
@@ -90,18 +55,41 @@ app.post('/:userId/task',(req,res)=> {
         res.send(userDoc);
     })
 });
-    //For updating task corresponding to users
-app.patch('/:userId/task/:taskId',(req,res)=> {
-    Task.findOneAndUpdate({ 
-        _id: req.params.taskId,
-         _userId: req.params.userId
+
+//For updating Users
+app.patch('/:userId',(req,res)=> {
+    user.findOneAndUpdate({ 
+        _id: req.params.userId
     }, {
-    $inc: req.body
-    }).then((result) => {
-        res.send(result);
+    $set: req.body          
+    }).then(() => {
+        // res.send(result);
+        res.sendStatus(200);
     })
 });
+//For updating task corresponding to users
+    app.patch('/:userId/task/:taskId',(req,res)=> {
+        Task.findOneAndUpdate({ 
+            _id: req.params.taskId,
+             _userId: req.params.userId
+        }, {
+        $inc: req.body
+        }).then((result) => {
+            res.send(result);
+        })
+    });
 
+//For deleting Users
+app.delete('/:userId',(req,res)=> {
+    user.findOneAndRemove({
+         _id: req.params.userId 
+    },{
+         $set: req.body
+        }).then((removeduserDoc) => {
+            res.send(removeduserDoc);
+        })
+        
+});
 //For deleting task corresponding to users
 app.delete('/:userId/task/:taskId',(req,res)=> {
     Task.findOneAndRemove({
@@ -111,6 +99,18 @@ app.delete('/:userId/task/:taskId',(req,res)=> {
             res.send(removedtaskDoc);
         })
 });
+
+
+/* app.get('/:userId',(req,res)=> {
+     Task.findOne({
+         _id: req.params.taskId,
+         _userId: req.params.userId
+     }).then((result) => {
+        res.send(result);
+     }).catch((err)=>{
+         res.send(err);
+    })
+ });*/
 
 //Connect to Db
 mongoose.connect('mongodb://127.0.0.1:27017/Task-manager', {

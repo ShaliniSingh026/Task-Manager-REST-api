@@ -7,7 +7,7 @@ Username: {
     required: true,
     trim:true,
     maxlength: [35, 'Name must have not more than 35 characters'],
-    minLength: [5, 'Name is too short!'], 
+    minLength: [4, 'Name is too short!'], 
     validate(value) {
         if (!validator.isAlpha(value)) {
             throw new Error("Name must contain only characters between Aa-zZ");
@@ -44,7 +44,7 @@ phn_no: {
     maxlength: 10
 }
 })
-//Hashing the Password
+//----Hashing the Password----
 userSchema.pre('save', async function (next) {
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt);
